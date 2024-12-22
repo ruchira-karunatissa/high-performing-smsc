@@ -1,0 +1,5 @@
+Database: smsc_db
+User: smsc_user
+Password: smsc_password
+Host: localhost
+Port: 5432

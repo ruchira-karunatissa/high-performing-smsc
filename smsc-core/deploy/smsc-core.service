@@ -1,0 +1,17 @@
+[Unit]
+Description=SMSC Core Service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=smsc
+Group=smsc
+WorkingDirectory=/opt/smsc-core
+Environment=HOME=/opt/smsc-core
+Environment=RELX_REPLACE_OS_VARS=true
+ExecStart=/opt/smsc-core/bin/smsc_core foreground
+ExecStop=/opt/smsc-core/bin/smsc_core stop
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

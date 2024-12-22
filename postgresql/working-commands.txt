@@ -1,0 +1,47 @@
+1> application:stop(smsc_core).
+2> application:stop(cowboy).
+3> application:stop(ranch).
+
+4> application:ensure_all_started(ranch).
+5> application:ensure_all_started(cowboy).
+
+6> {ok, Pid} = smsc_sup:start_link().
+
+7> Port = 8080.
+8> Dispatch = cowboy_router:compile([
+    {'_', [
+        {"/api/messages", smsc_http_handler, []},
+        {"/api/messages/:id", smsc_http_handler, []},
+        {"/api/metrics", smsc_http_handler, []},
+        {"/api/config", smsc_http_handler, []}
+    ]}
+]).
+9> {ok, _} = cowboy:start_clear(http_listener,
+    [{port, Port}],
+    #{env => #{dispatch => Dispatch}}
+).
+
+10> ranch:info().
+
+
+
+
+
+1> smsc_utils:restart_http().
+
+2> DefaultConfig = #{
+    <<"smsc_host">> => <<"localhost">>,
+    <<"smsc_port">> => 2775,
+    <<"system_id">> => <<"test_system">>,
+    <<"password">> => <<"test_password">>,
+    <<"max_retries">> => 3,
+    <<"retry_delay">> => 60,
+    <<"system_type">> => <<"">>,
+    <<"interface_version">> => 52,
+    <<"reconnect_interval">> => 5,
+    <<"enquire_link_interval">> => 30
+}.
+
+3> smsc_core:update_config(<<"smsc_config">>, DefaultConfig).
+
+4> smsc_core:get_config(<<"smsc_config">>).
