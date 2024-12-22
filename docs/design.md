@@ -1,4 +1,4 @@
-# SMSC Core Application Design Document
+# High Performing SMSC Application Design Document
 
 ## Table of Contents
 1. [Overview](#overview)
